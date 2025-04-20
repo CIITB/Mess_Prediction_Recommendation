@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Meal Attendance Prediction</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background: #fafafa;
+        }
+        label {
+            display: block;
+            margin: 15px 0 5px;
+            font-weight: bold;
+        }
+        .form-container input, .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 20px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .form-container input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        .form-container input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .result {
+            font-size: 1.2em;
+            color: #400fd1;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .result p {
+            margin: 18px 0 10px 0;
+        }
+        .result strong {
+            font-size: 1.1em;
+        }
+        .result ul {
+            display: inline-block;
+            text-align: left;
+            margin: 0 auto;
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+        .result li {
+            margin-bottom: 6px;
+        }
+        .error-message {
+            color: #dc3545;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c2c7;
+            background: #fff0f3;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Meal Attendance Prediction</h2>
+        {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+        {% endif %}
+        <form action="/predict" method="post" autocomplete="off">
+            {# If using Flask-WTF/CSRF, include the token below #}
+            {# <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"> #}
+
+            <label for="day">Day:</label>
+            <select name="day" id="day" required autocomplete="off">
+                <option value="">Select Day</option>
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
+            </select>
+
+            <label for="mealSelect">Meal:</label>
+            <select name="meal" id="mealSelect" required autocomplete="off">
+                <option value="">Select Meal</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Snacks">Snacks</option>
+                <option value="Dinner">Dinner</option>
+            </select>
+            
+            <label for="menuSelect">Menu Item:</label>
+            <select name="menu_item" id="menuSelect" required autocomplete="off">
+                <option value="">Select Menu</option>
+            </select>
+            
+            <input type="submit" value="Predict">
+        </form>
+
+        {% if prediction %}
+        <div class="result">
+            <p><strong>Predicted Attendance:</strong> {{ prediction.predicted_attendance|int }}</p>
+            <p><strong>Action:</strong> {{ prediction.action }}</p>
+            {% if prediction.recommended_alternatives %}
+            <p><strong>Recommended Alternatives:</strong></p>
+            <ul>
+                {% for alt in prediction.recommended_alternatives %}
+                <li>{{ alt }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        const menuMap = {
+            "Breakfast": ["PurBhaji", "Dosa", "Aloo Paratha", "Upma", "Idli-Sambhar", "Poha"],
+            "Lunch": ["Chole-Bhature", "Dal Makhani", "Chicken Biryani", "Rajma-Chawal", "Paneer Masala"],
+            "Snacks": ["Sandwich", "Cutlet", "Tea-Pohe", "Pakora", "Samosa"],
+            "Dinner": ["Paneer Butter Masala", "Jeera Rice", "Roti-Sabzi", "Aloo Gobi", "Dal-Chawal"]
+        };
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const mealSelect = document.getElementById('mealSelect');
+            const menuSelect = document.getElementById('menuSelect');
+
+            mealSelect.addEventListener("change", function () {
+                const selectedMeal = this.value;
+                menuSelect.innerHTML = '<option value="">Select Menu</option>';
+
+                if (menuMap[selectedMeal]) {
+                    menuMap[selectedMeal].forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = item;
+                        option.textContent = item;
+                        menuSelect.appendChild(option);
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
