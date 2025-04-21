@@ -1,6 +1,9 @@
-## 🚀 Live Demo
+## Live Demo
 
 You can access the deployed Website here: [Mess Prediction & Recommendation](https://mess-prediction-recommenda.onrender.com)
+## Video Demonstration
+
+A video demonstration of the project using the Flask REST API is available here: [Watch the Demo](https://drive.google.com/file/d/1EAXiCOn0OIfDKiJpyYfX8Bnoe-7xDa7x/view?usp=sharing)
 
 # **Smart Mess Menu Recommender**
 
