@@ -1,6 +1,6 @@
 ## 🚀 Live Demo
 
-You can access the deployed app here: [Mess Prediction & Recommendation App](https://mess-prediction-recommenda.onrender.com)
+You can access the deployed Render Website here: [Mess Prediction & Recommendation](https://mess-prediction-recommenda.onrender.com)
 
 # **Smart Mess Menu Recommender**
 
